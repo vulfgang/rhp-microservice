@@ -1,7 +1,7 @@
 function RequestHeaderParser () {
   // TODO: let parse function accept array or string of options to parse
   this.parse = function (req, res) {
-    // res.json(headers);
+    // res.json(req.headers);
 
     res.json({
       "ipaddress": this.parseIPaddress(req, res, true),
@@ -29,11 +29,13 @@ function RequestHeaderParser () {
   };
 
   this.parseSoftware = function (req, res, dontRespond) {
-    // TODO
-    if (dontRespond)
-      return null;
+    var software = req.headers['user-agent'].match(/\(.*?\)/)[0]
+                    .slice(1, -1).split('; ')[1];
 
-    res.json({"software": null});
+    if (dontRespond)
+      return software;
+
+    res.json({"software": software});
   };
 }
 
